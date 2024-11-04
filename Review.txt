@@ -1,0 +1,14 @@
+1. In line 235 through 237:
+
+    // Set initial direction of switching and previous voltage.
+            dir = 1;
+            Vprev = 0;
+    
+    Review: It's assumed that the direction of the ferroelectric field
+    starts on the falling side, which means IF the minimum ferroelectric
+    voltage is below zero, you'd first have to excite the ferroelectric
+    to Vmin before you can actually excite it with a positive voltage
+    for switching.
+
+2.
+
