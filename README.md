@@ -19,7 +19,7 @@ The PFECAP model simulates the behavior of ferroelectric capacitors, specificall
 
 The code contains several key analog functions that model various aspects of the ferroelectric capacitor. Below, we discuss each function in detail and explain their purpose, along with references to the literature where applicable.
 
-### 1. `F(Volt, dir)` - Ferro Loop Function
+### 1. Ferro Loop Function - `F(Volt, dir)`
 
 *From line 75-85*
 
@@ -32,11 +32,11 @@ This function calculates the polarization hysteresis loop based on the input vol
   ```
 - **Explanation**: The hyperbolic tangent function is used because it provides a good fit for the saturation characteristics of ferroelectric capacitors. The parameter `a` adjusts the slope of the function, which controls how steeply the polarization switches as voltage increases.
 
-### 2. `calc_m(a_P, b_P, a_F, b_F)` - Multiplier Calculation
+### 2. Multiplier Calculation - `calc_m(a_P, b_P, a_F, b_F)`
 
 *From line 87-107*
 
-This function calculates the slope (`m`) of the linear segment between two points on the polarization curve. This is an important part of determining the behavior of minor hysteresis loops within the Preisach model.
+This function calculates the slope (`m`) of the linear segment between two points on the polarization curve. This is an important part of determining the behavior of minor hysteresis loops within the Preisach model. Taken from [Ni. K et al. (2018)](https://ieeexplore.ieee.org/abstract/document/8510622) equation **2.a.3**
 
 - **Formula**:
 
@@ -46,21 +46,35 @@ This function calculates the slope (`m`) of the linear segment between two point
 
   where `DP = a_P - b_P` and `DF = a_F - b_F`.
 - **Explanation**: The slope `m` represents how the polarization changes between two different voltage points. This value is used to describe the linear segments connecting turning points in the hysteresis loop, allowing the model to accurately capture minor loop trajectories.
+- **Inputs:**
 
-### 3. `calc_b(a_P, b_P, a_F, b_F)` - Offset Calculation
+  - `a_P`: P_{FE}(V_A)
+  - `b_P`: P_{FE}(V_B)
+  - `a_F`: F(V_A)
+  - `b_F`: F(V_B)
+
+### 3. Offset Calculation - `calc_b(a_P, b_P, a_F, b_F)`
 
 *From line 109-129*
 
-This function calculates the offset (`b`) for the linear segment on the polarization curve. Together with `calc_m()`, it helps to accurately define the trajectories of minor loops within the Preisach model.
+This function calculates the offset (`b`) for the linear segment on the polarization curve. Together with `calc_m()`, it helps to accurately define the trajectories of minor loops within the Preisach model. Taken from [Ni. K et al. (2018)](https://ieeexplore.ieee.org/abstract/document/8510622) equation **2.a.4**
 
 - **Formula**:
 
   ```
-  calc_b = (b_P * a_F - a_P * b_F) / (a_F - b_F);
+  calc_b = DPF / DF;
   ```
-- **Explanation**: The offset `b` is used along with the slope `m` to determine the complete equation of the polarization for a given segment. This allows the model to transition smoothly between different parts of the hysteresis loop.
 
-### 4. `P(Volt, dir, m, b)` - Scaled Ferro Loop Function
+  where `DPF = (b_P * a_F - a_P * b_F)` and `DF = (a_F - b_F)`
+- **Explanation**: The offset `b` is used along with the slope `m` to determine the complete equation of the polarization for a given segment. This allows the model to transition smoothly between different parts of the hysteresis loop.
+- **Inputs:**
+
+  - `a_P`: P_{FE}(V_A)
+  - `b_P`: P_{FE}(V_B)
+  - `a_F`: F(V_A)
+  - `b_F`: F(V_B)
+
+### 4. Scaled Ferro Loop Function - `P(Volt, dir, m, b)`
 
 *From line 131-140*
 
@@ -73,7 +87,7 @@ This function calculates the polarization (`P`) for a given input voltage. It us
   ```
 - **Explanation**: The function `P()` models the polarization response within the context of the overall hysteresis behavior. This approach follows the Preisach model methodology, where the overall hysteresis loop is built from multiple smaller segments.
 
-### 5. `Q(Volt, dir, m, b)` - Final Ferroelectric Charge Loop
+### 5. Final Ferroelectric Charge Loop  `Q(Volt, dir, m, b)`
 
 *From line 142-152*
 
@@ -86,7 +100,7 @@ This function calculates the total charge (`Q`) of the ferroelectric capacitor. 
   ```
 - **Explanation**: This function adds the capacitive component (based on the relative permittivity and thickness of the ferroelectric layer) to the polarization component to determine the overall charge response. This follows the standard approach for modeling ferroelectric capacitors, where both the nonlinear polarization and linear dielectric contributions are included.
 
-### 6. `dF(Volt, dir)` - Derivative of Ferro Loop Function
+### 6. Derivative of Ferro Loop Function -  `dF(Volt, dir)`
 
 *From line 154-165*
 
@@ -99,7 +113,7 @@ This function calculates the derivative of the function `F()` with respect to th
   ```
 - **Explanation**: The derivative of `F()` is critical for accurately determining how the polarization changes in response to small changes in voltage. It is used in iterative methods to converge on the correct coercive voltage value during simulation.
 
-### 7. `dP(Volt, dir, m, b)` - Derivative of Polarization
+### 7. Derivative of Polarization - `dP(Volt, dir, m, b)`
 
 *From line 167-175*
 
@@ -112,7 +126,7 @@ This function calculates the derivative of polarization (`P`) with respect to vo
   ```
 - **Explanation**: The derivative of polarization is used in calculating the rate of change of the ferroelectric charge, which is essential for modeling the dynamic behavior of the capacitor.
 
-### 8. `dQ(Volt, dir, m, b)` - Derivative of Total Charge
+### 8. Derivative of Total Charge - `dQ(Volt, dir, m, b)`
 
 *From line 177-186*
 
@@ -139,3 +153,8 @@ The iterative process involves finding the voltage that corresponds to a given c
 ## Conclusion
 
 The PFECAP model presented here provides a detailed and computationally efficient representation of ferroelectric capacitors, suitable for use in circuit simulations. By employing the Preisach model and building on existing literature, this implementation effectively captures both the non-linear switching behavior and the history-dependent nature of ferroelectric materials. The various analog functions described above work together to ensure that the simulated capacitor closely matches the expected behavior observed in experimental data.
+
+# Work to be done
+
+* [ ] Verify that each funtion is written according to literature
+* [ ] Verify function functionality in code
