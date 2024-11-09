@@ -85,7 +85,7 @@ This function calculates the polarization (`P`) for a given input voltage. It us
   ```
   P = F(Volt, dir) * m + b;
   ```
-- **Explanation**: The function `P()` models the polarization response within the context of the overall hysteresis behavior. This approach follows the Preisach model methodology, where the overall hysteresis loop is built from multiple smaller segments.
+- **Explanation**: The function `P()` models the polarization response within the context of the overall hysteresis behavior. This approach follows the Preisach model methodology, where the overall hysteresis loop is built from multiple smaller segments. Taken from [K. Ni et al &#39;&#39;Critical Role&#39;&#39; (2018)](https://ieeexplore.ieee.org/document/8352114) equation **2**
 
 ### 5. Final Ferroelectric Charge Loop  `Q(Volt, dir, m, b)`
 
@@ -98,7 +98,7 @@ This function calculates the total charge (`Q`) of the ferroelectric capacitor. 
   ```
   Q = P(Volt, dir, m, b) + epsFE_r * EPS0 * Volt / tFE;
   ```
-- **Explanation**: This function adds the capacitive component (based on the relative permittivity and thickness of the ferroelectric layer) to the polarization component to determine the overall charge response. This follows the standard approach for modeling ferroelectric capacitors, where both the nonlinear polarization and linear dielectric contributions are included.
+- **Explanation**: This function adds the capacitive component (based on the relative permittivity and thickness of the ferroelectric layer) to the polarization component to determine the overall charge response. This follows the standard approach for modeling ferroelectric capacitors, where both the nonlinear polarization and linear dielectric contributions are included. Taken from [k. Ni et al &#39;&#39;Critical Role&#39;&#39; (2018)](https://ieeexplore.ieee.org/document/8352114) equation **3**
 
 ### 6. Derivative of Ferro Loop Function -  `dF(Volt, dir)`
 
